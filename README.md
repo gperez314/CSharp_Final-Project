@@ -1,4 +1,3 @@
-====================================================
 C# FINAL PROJECT - CONNECT 4
 
 Group Name: C-Builders
