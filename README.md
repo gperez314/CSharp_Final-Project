@@ -1,4 +1,3 @@
-C# FINAL PROJECT - CONNECT 4
+Group Name: C-Builders Group
 
-Group Name: C-Builders
-Group Members: Glenn Perez, Rod Stephen Espiritu
+Members: Glenn Perez, Rod Stephen Espiritu
