@@ -1,9 +1,11 @@
-﻿using System.Xml.Linq;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
 
 class Player
 {
     public string Name { get; set; }
     public int ID { get; set; }
+
 
     public Player(string name, int id)
     {
@@ -30,23 +32,28 @@ class Connect4Game
     private static Player _player1 { get; set; }
     private static Player _player2 { get; set; }
 
+    private static Board _board { get; set; }
+
+
     static Connect4Game()
     {
         _turn = 0;
     }
 
-    public static void AddPlayers()
+    public static void SetupGame()
     {
         Console.WriteLine("Please input player 1 name:");
         _player1 = new Player(Console.ReadLine(), 1);
 
         Console.WriteLine("Please input player 2 name:");
         _player2 = new Player(Console.ReadLine(), 2);
+
+        _board = new Board();
     }
 
     private static bool MakeTurn(Player _player)
     {
-        _player.Turn();
+        _board.UpdateBoard(_player, _player.Turn());
         return CheckWin(_player);
     }
 
@@ -59,6 +66,7 @@ class Connect4Game
         }
         return true;
     }
+
 
     public static bool Play()
     {
@@ -77,6 +85,51 @@ class Connect4Game
 
 }
 
+class Board
+{
+    public int[,] BoardState { get; set; }
+
+    private static int _rows { get; set; } = 7;
+    private static int _columns { get; set; } = 7;
+
+    public Board()
+    {
+        BoardState = new int[_rows, _columns];
+
+        // Initialize each element to zero
+        for (int i = 0; i < _rows; i++)
+        {
+            for (int j = 0; j < _columns; j++)
+            {
+                BoardState[i, j] = 0;
+            }
+        }
+    }
+
+    public void UpdateBoard(Player player, int mark)
+    {
+        BoardState[0, mark] = player.ID;
+        PrintBoard();
+    }
+
+    public void PrintBoard()
+    {
+        for (int i = 0; i < _rows; i++)
+        {
+            Console.Write("|  ");
+            for (int j = 0; j < _columns; j++)
+            {
+                Console.Write(BoardState[i, j].ToString() + "  ");
+            }
+            Console.Write("|");
+            Console.WriteLine();
+        }
+    }
+
+
+}
+
+
 
 
 class Program
@@ -88,10 +141,13 @@ class Program
         while (run)
         {
             Console.Clear();
-            Connect4Game.AddPlayers();
+            Connect4Game.SetupGame();
             while (Connect4Game.Play()) ;
             run = Connect4Game.PlayAgain();
         }
+
+
+
 
     }
 }
