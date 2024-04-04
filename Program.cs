@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// Updated Board
+
+using System.Diagnostics;
 using System.Xml.Linq;
 
 class Player
