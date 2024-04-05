@@ -1,6 +1,7 @@
 ﻿// Updated Board
 
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 class Player
@@ -22,7 +23,7 @@ class Player
     public int Turn()
     {
         Console.WriteLine($"{Name}: Please input the column to drop move");
-        int playerTurn = int.Parse(Console.ReadLine());
+        int playerTurn = int.Parse(Console.ReadLine())-1;
         return playerTurn;
     }
 }
@@ -44,16 +45,20 @@ class Connect4Game
 
     public static void SetupGame()
     {
-        Console.WriteLine("Please input player 1 name:");
-        _player1 = new Player(Console.ReadLine(), 1);
+        //Console.WriteLine("Please input player 1 name:");
+        //_player1 = new Player(Console.ReadLine(), 1);
 
-        Console.WriteLine("Please input player 2 name:");
-        _player2 = new Player(Console.ReadLine(), 2);
+        //Console.WriteLine("Please input player 2 name:");
+        //_player2 = new Player(Console.ReadLine(), 2);
+
+        _player1 = new Player("Glenn", 1);
+
+        _player2 = new Player("Roma", 2);
 
         _board = new Board();
     }
 
-    private static bool MakeTurn(Player _player)
+    public static bool MakeTurn(Player _player)
     {
         _board.UpdateBoard(_player, _player.Turn());
         return CheckWin(_player);
@@ -61,7 +66,7 @@ class Connect4Game
 
     private static bool CheckWin(Player _player)
     {
-        if (_turn > 5)
+        if (_turn > 100)
         {
             Console.WriteLine($"Congratulatioons {_player} wins!");
             return false;
@@ -110,8 +115,33 @@ class Board
 
     public void UpdateBoard(Player player, int mark)
     {
-        BoardState[0, mark] = player.ID;
-        PrintBoard();
+        int nextCell = GetNextAvailCell(mark);
+
+        if (nextCell >= 0)
+        {
+            BoardState[nextCell, mark] = player.ID;
+            PrintBoard();
+        }
+        else
+        {
+            Console.WriteLine("Invalid move. Column is already full!");
+            Connect4Game.MakeTurn(player);
+
+        }
+
+
+
+
+    }
+
+    private int GetNextAvailCell(int column)
+    {
+        for (int i = _rows-1; i >= 0; i--)
+        {
+            if (BoardState[i, column] == 0)
+                return i;
+        }
+        return -1;
     }
 
     public void PrintBoard()
@@ -126,12 +156,11 @@ class Board
             Console.Write("|");
             Console.WriteLine();
         }
+        Console.WriteLine("=========================");
+        Console.WriteLine("|  1  2  3  4  5  6  7  |");
+        Console.WriteLine("=========================");
     }
-
-
 }
-
-
 
 
 class Program

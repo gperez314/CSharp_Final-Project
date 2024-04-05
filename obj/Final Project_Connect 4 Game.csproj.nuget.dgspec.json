@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Glenn\\Desktop\\C# Final Project\\Final Project_Connect 4 Game\\Final Project_Connect 4 Game.csproj": {}
+    "C:\\Users\\Glenn\\Desktop\\C# Final Project\\CSharp_Final-Project\\Final Project_Connect 4 Game.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Glenn\\Desktop\\C# Final Project\\Final Project_Connect 4 Game\\Final Project_Connect 4 Game.csproj": {
+    "C:\\Users\\Glenn\\Desktop\\C# Final Project\\CSharp_Final-Project\\Final Project_Connect 4 Game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Glenn\\Desktop\\C# Final Project\\Final Project_Connect 4 Game\\Final Project_Connect 4 Game.csproj",
+        "projectUniqueName": "C:\\Users\\Glenn\\Desktop\\C# Final Project\\CSharp_Final-Project\\Final Project_Connect 4 Game.csproj",
         "projectName": "Final Project_Connect 4 Game",
-        "projectPath": "C:\\Users\\Glenn\\Desktop\\C# Final Project\\Final Project_Connect 4 Game\\Final Project_Connect 4 Game.csproj",
+        "projectPath": "C:\\Users\\Glenn\\Desktop\\C# Final Project\\CSharp_Final-Project\\Final Project_Connect 4 Game.csproj",
         "packagesPath": "C:\\Users\\Glenn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Glenn\\Desktop\\C# Final Project\\Final Project_Connect 4 Game\\obj\\",
+        "outputPath": "C:\\Users\\Glenn\\Desktop\\C# Final Project\\CSharp_Final-Project\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
