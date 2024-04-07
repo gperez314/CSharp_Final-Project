@@ -28,6 +28,109 @@ class Player
     }
 }
 
+class Board
+{
+    public int[,] BoardState { get; set; }
+
+    public static int Rows { get; private set; } = 7;
+    public static int Columns { get; private set; } = 7;
+
+    public Board()
+    {
+        BoardState = new int[Rows, Columns];
+
+        // Initialize each element to zero
+        for (int i = 0; i < Rows; i++)
+        {
+            for (int j = 0; j < Columns; j++)
+            {
+                BoardState[i, j] = 0;
+            }
+        }
+    }
+
+    public void UpdateBoard(Player player, int mark)
+    {
+        int nextCell = GetNextAvailCell(mark);
+
+        if (nextCell >= 0)
+        {
+            BoardState[nextCell, mark] = player.ID;
+            Display.PrintBoard(BoardState);
+        }
+        else
+        {
+            Console.WriteLine("Invalid move. Column is already full!");
+            Connect4Game.MakeTurn(player);
+
+        }
+    }
+
+    private int GetNextAvailCell(int column)
+    {
+        for (int i = Rows - 1; i >= 0; i--)
+        {
+            if (BoardState[i, column] == 0)
+                return i;
+        }
+        return -1;
+    }
+
+
+    public bool CheckWin(int player)
+    {
+        // horizontalCheck 
+        for (int j = 0; j < Rows - 3; j++)
+        {
+            for (int i = 0; i < Columns; i++)
+            {
+                if (BoardState[i,j] == player && BoardState[i,j + 1] == player && 
+                    BoardState[i,j + 2] == player && BoardState[i,j + 3] == player)
+                {
+                    return true;
+                }
+            }
+        }
+
+        // verticalCheck
+        for (int i = 0; i < Columns - 3; i++)
+        {
+            for (int j = 0; j < Rows; j++)
+            {
+                if (BoardState[i,j] == player && BoardState[i + 1,j] == player && 
+                    BoardState[i + 2,j] == player && BoardState[i + 3,j] == player)
+                {
+                    return true;
+                }
+            }
+        }
+
+        // ascendingDiagonalCheck 
+        for (int i = 3; i < Columns; i++)
+        {
+            for (int j = 0; j < Rows - 3; j++)
+            {
+                if (BoardState[i,j] == player && BoardState[i - 1,j + 1] == player && 
+                    BoardState[i - 2,j + 2] == player && BoardState[i - 3,j + 3] == player)
+                    return true;
+            }
+        }
+
+        // descendingDiagonalCheck
+        for (int i = 3; i < Columns; i++)
+        {
+            for (int j = 3; j < Rows; j++)
+            {
+                if (BoardState[i,j] == player && BoardState[i - 1,j - 1] == player && 
+                    BoardState[i - 2,j - 2] == player && BoardState[i - 3,j - 3] == player)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+}
+
 
 class Connect4Game
 {
@@ -56,22 +159,13 @@ class Connect4Game
         _player2 = new Player("Roma", 2);
 
         _board = new Board();
+        _turn = 0;
     }
 
     public static bool MakeTurn(Player _player)
     {
         _board.UpdateBoard(_player, _player.Turn());
-        return CheckWin(_player);
-    }
-
-    private static bool CheckWin(Player _player)
-    {
-        if (_turn > 100)
-        {
-            Console.WriteLine($"Congratulatioons {_player} wins!");
-            return false;
-        }
-        return true;
+        return _board.CheckWin(_player.ID);
     }
 
 
@@ -79,9 +173,9 @@ class Connect4Game
     {
         _turn++;
         if (_turn % 2 == 1)
-            return MakeTurn(_player1);
+            return !MakeTurn(_player1);
         else
-            return MakeTurn(_player2);
+            return !MakeTurn(_player2);
     }
 
     public static bool PlayAgain()
@@ -92,66 +186,24 @@ class Connect4Game
 
 }
 
-class Board
+
+
+
+
+
+
+
+
+public class Display
 {
-    public int[,] BoardState { get; set; }
-
-    private static int _rows { get; set; } = 7;
-    private static int _columns { get; set; } = 7;
-
-    public Board()
+    public static void PrintBoard(int[,] board)
     {
-        BoardState = new int[_rows, _columns];
-
-        // Initialize each element to zero
-        for (int i = 0; i < _rows; i++)
-        {
-            for (int j = 0; j < _columns; j++)
-            {
-                BoardState[i, j] = 0;
-            }
-        }
-    }
-
-    public void UpdateBoard(Player player, int mark)
-    {
-        int nextCell = GetNextAvailCell(mark);
-
-        if (nextCell >= 0)
-        {
-            BoardState[nextCell, mark] = player.ID;
-            PrintBoard();
-        }
-        else
-        {
-            Console.WriteLine("Invalid move. Column is already full!");
-            Connect4Game.MakeTurn(player);
-
-        }
-
-
-
-
-    }
-
-    private int GetNextAvailCell(int column)
-    {
-        for (int i = _rows-1; i >= 0; i--)
-        {
-            if (BoardState[i, column] == 0)
-                return i;
-        }
-        return -1;
-    }
-
-    public void PrintBoard()
-    {
-        for (int i = 0; i < _rows; i++)
+        for (int i = 0; i < Board.Rows; i++)
         {
             Console.Write("|  ");
-            for (int j = 0; j < _columns; j++)
+            for (int j = 0; j < Board.Columns; j++)
             {
-                Console.Write(BoardState[i, j].ToString() + "  ");
+                Console.Write(board[i, j].ToString() + "  ");
             }
             Console.Write("|");
             Console.WriteLine();
@@ -160,6 +212,7 @@ class Board
         Console.WriteLine("|  1  2  3  4  5  6  7  |");
         Console.WriteLine("=========================");
     }
+
 }
 
 
@@ -176,9 +229,5 @@ class Program
             while (Connect4Game.Play()) ;
             run = Connect4Game.PlayAgain();
         }
-
-
-
-
     }
 }
