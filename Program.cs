@@ -1,6 +1,7 @@
 ﻿// Updated Board
 
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
@@ -18,11 +19,11 @@ class Player
     public override string ToString()
     {
         return $"Player: {Name}";
-    }
+    }   
 
     public int Turn()
     {
-        Console.WriteLine($"{Name}: Please input the column to drop move");
+        Display.PlayerTurn(Name, ID); ;
         int playerTurn = int.Parse(Console.ReadLine())-1;
         return playerTurn;
     }
@@ -62,7 +63,6 @@ class Board
         {
             Console.WriteLine("Invalid move. Column is already full!");
             Connect4Game.MakeTurn(player);
-
         }
     }
 
@@ -148,24 +148,19 @@ class Connect4Game
 
     public static void SetupGame()
     {
-        //Console.WriteLine("Please input player 1 name:");
-        //_player1 = new Player(Console.ReadLine(), 1);
+        Display.GetPlayerName(" Please enter Player 1's name: ", 1);
+        _player1 = new Player(Console.ReadLine(), 1);
 
-        //Console.WriteLine("Please input player 2 name:");
-        //_player2 = new Player(Console.ReadLine(), 2);
+        Display.GetPlayerName(" Please enter Player 2's name: ", 2);
+        _player2 = new Player(Console.ReadLine(), 2);
 
-        _player1 = new Player("Glenn", 1);
+        //_player1 = new Player("Glenn", 1);
 
-        _player2 = new Player("Roma", 2);
+        //_player2 = new Player("Roma", 2);
 
         _board = new Board();
+        Display.PrintBoard(_board.BoardState);
         _turn = 0;
-    }
-
-    public static bool MakeTurn(Player _player)
-    {
-        _board.UpdateBoard(_player, _player.Turn());
-        return _board.CheckWin(_player.ID);
     }
 
 
@@ -178,9 +173,21 @@ class Connect4Game
             return !MakeTurn(_player2);
     }
 
+    public static bool MakeTurn(Player _player)
+    {
+        _board.UpdateBoard(_player, _player.Turn());
+        if (_board.CheckWin(_player.ID))
+        {
+            Display.Winner(_player.Name, _player.ID);
+            return true;
+        }
+        return false;
+    }
+
+
     public static bool PlayAgain()
     {
-        Console.WriteLine("Do you want to play again (Y/N)?");
+        Console.Write("Do you want to play again (Y/N)? ");
         return char.Parse(Console.ReadLine()) == 'Y';
     }
 
@@ -196,35 +203,93 @@ class Connect4Game
 
 public class Display
 {
+    public static void DisplayTitle()
+    {
+        Console.WriteLine("=========================================");
+        Console.WriteLine("|                                       |");
+        Console.WriteLine("|   CONNECT-4 GAME DEVELOPMENT PROJECT  |");
+        Console.WriteLine("|                                       |");
+        Console.WriteLine("-----------------------------------------");
+    }
+
+    public static void GetPlayerName(string str, int id)
+    {
+        Console.Clear();
+        DisplayTitle();
+        Console.WriteLine("| Glenn Perez  |  Rod Stephen Espiritu  |");
+        Console.WriteLine("-----------------------------------------");
+        Console.WriteLine("");
+        ColoredDisplay("   ", id);
+        Console.Write(str);
+    }
+
     public static void PrintBoard(int[,] board)
     {
+        Console.Clear();
+        DisplayTitle();
         for (int i = 0; i < Board.Rows; i++)
         {
-            Console.Write("|  ");
+            Console.Write("|    ");
             for (int j = 0; j < Board.Columns; j++)
             {
-                Console.Write(board[i, j].ToString() + "  ");
+                Symbol(board[i, j]);
+                Console.Write("    ");
             }
             Console.Write("|");
             Console.WriteLine();
         }
-        Console.WriteLine("=========================");
-        Console.WriteLine("|  1  2  3  4  5  6  7  |");
-        Console.WriteLine("=========================");
+        Console.WriteLine("-----------------------------------------");
+        Console.WriteLine("|    1    2    3    4    5    6    7    |");
+        Console.WriteLine("-----------------------------------------");
+        Console.WriteLine("| Please input column no. to cast move: |");
+        Console.WriteLine("=========================================");
     }
 
+    public static void PlayerTurn(string name, int id)
+    {
+        Display.ColoredDisplay(name + "'s", id);
+        Console.Write(" turn: ");
+    }
+
+    public static void Winner(string name, int id)
+    {
+        Console.Write("| Congratulations! ");
+        Display.ColoredDisplay(name, id);
+        Console.WriteLine(" wins! ");
+        Console.WriteLine("=========================================");
+    }
+
+
+    public static void Symbol(int id)
+    {
+        if (id == 1)
+            ColoredDisplay("X", id);
+        else if (id == 2)
+            ColoredDisplay("O", id);
+        else
+            Console.Write("-");
+    }
+
+    public static void ColoredDisplay(string str, int id)
+    {
+        if (id == 1)
+            Console.BackgroundColor = ConsoleColor.Red;
+        else
+            Console.BackgroundColor = ConsoleColor.Blue;
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.Write(str);
+        Console.ResetColor();
+    }
 }
 
 
 class Program
 {
-
     static void Main(string[] args)
     {
         bool run = true;
         while (run)
         {
-            Console.Clear();
             Connect4Game.SetupGame();
             while (Connect4Game.Play()) ;
             run = Connect4Game.PlayAgain();
