@@ -1,4 +1,9 @@
-/﻿// Updated Board
+﻿// Updated Board
+
+using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 class Player
 {
@@ -86,6 +91,7 @@ class Board
                 }
             }
         }
+
         // verticalCheck
         for (int i = 0; i < Columns - 3; i++)
         {
@@ -98,6 +104,7 @@ class Board
                 }
             }
         }
+
         // ascendingDiagonalCheck 
         for (int i = 3; i < Columns; i++)
         {
@@ -108,6 +115,7 @@ class Board
                     return true;
             }
         }
+
         // descendingDiagonalCheck
         for (int i = 3; i < Columns; i++)
         {
