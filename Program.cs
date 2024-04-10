@@ -1,4 +1,4 @@
-﻿// Updated Board
+/﻿// Updated Board
 
 class Player
 {
@@ -86,7 +86,6 @@ class Board
                 }
             }
         }
-
         // verticalCheck
         for (int i = 0; i < Columns - 3; i++)
         {
@@ -99,7 +98,6 @@ class Board
                 }
             }
         }
-
         // ascendingDiagonalCheck 
         for (int i = 3; i < Columns; i++)
         {
@@ -110,7 +108,6 @@ class Board
                     return true;
             }
         }
-
         // descendingDiagonalCheck
         for (int i = 3; i < Columns; i++)
         {
