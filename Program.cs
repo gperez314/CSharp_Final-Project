@@ -1,10 +1,5 @@
 ﻿// Updated Board
 
-using System.Diagnostics;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
-
 class Player
 {
     public string Name { get; set; }
