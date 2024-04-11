@@ -21,10 +21,24 @@ class Player
         return $"Player: {Name}";
     }   
 
-    public int Turn()
+    public virtual async Task<int> Turn()
     {
         Display.PlayerTurn(Name, ID); ;
         int playerTurn = int.Parse(Console.ReadLine())-1;
+        return playerTurn;
+    }
+}
+
+class AI : Player
+{
+    public AI(string name, int id) : base(name, id) {}
+    public override async Task<int> Turn()
+    {
+        Display.PlayerTurn(Name, ID);
+        await Task.Delay(1000);
+        int playerTurn = (new Random()).Next(0, 7);
+        Console.Write(playerTurn + 1);
+        Console.WriteLine("");
         return playerTurn;
     }
 }
@@ -135,6 +149,7 @@ class Connect4Game
 {
     private static int _turn { get; set; }
     private static bool _win { get; set; }
+    private static int _mode { get; set; }
     private static Player _player1 { get; set; }
     private static Player _player2 { get; set; }
 
@@ -149,15 +164,23 @@ class Connect4Game
 
     public static void SetupGame()
     {
-        //Display.GetPlayerName(" Please enter Player 1's name: ", 1);
-        //_player1 = new Player(Console.ReadLine(), 1);
+        Display.GetGameMode();
+        Console.Write("Please select game mode:");
+        _mode = int.Parse(Console.ReadLine());
 
-        //Display.GetPlayerName(" Please enter Player 2's name: ", 2);
-        //_player2 = new Player(Console.ReadLine(), 2);
 
-        _player1 = new Player("Glenn", 1);
+        Display.GetPlayerName(" Please enter Player 1's name: ", 1);
+        _player1 = new Player(Console.ReadLine(), 1);
 
-        _player2 = new Player("Roma", 2);
+        if (_mode == 1)
+        {
+            Display.GetPlayerName(" Please enter Player 2's name: ", 2);
+            _player2 = new Player(Console.ReadLine(), 2);
+        }
+        else
+        {
+            _player2 = new AI("Computer", 2);
+        }
 
         _board = new Board();
         Display.PrintBoard(_board.BoardState, _win);
@@ -176,11 +199,16 @@ class Connect4Game
 
     public static bool MakeTurn(Player _player)
     {
-        _board.UpdateBoard(_player, _player.Turn());
+        _board.UpdateBoard(_player, _player.Turn().Result);
         _win = _board.CheckWin(_player.ID);
         Display.PrintBoard(_board.BoardState, _win);
         if (_win)
-            Display.Winner(_player.Name, _player.ID);
+        {
+            if ((_mode != 1) && (_player.ID == 2))
+                Display.LosttoAI(_player.Name, _player.ID);     
+            else
+                Display.Winner(_player.Name, _player.ID);
+        }
         return (_win);
     }
 
@@ -190,7 +218,6 @@ class Connect4Game
         Console.Write("Do you want to play again (Y/N)? ");
         return char.Parse(Console.ReadLine()) == 'Y';
     }
-
 }
 
 
@@ -210,6 +237,20 @@ public class Display
         Console.WriteLine("|   CONNECT-4 GAME DEVELOPMENT PROJECT  |");
         Console.WriteLine("|                                       |");
         Console.WriteLine("-----------------------------------------");
+    }
+
+    public static void GetGameMode()
+    {
+        Console.Clear();
+        DisplayTitle();
+        Console.WriteLine("| Glenn Perez  |  Rod Stephen Espiritu  |");
+        Console.WriteLine("-----------------------------------------");
+        Console.WriteLine("| <<<<<<<<<<< SELECT MODE >>>>>>>>>>>>> |");
+        Console.WriteLine("|                                       |");
+        Console.WriteLine("|            [1]: 2 Player              |");
+        Console.WriteLine("|            [2]: vs. Computer          |");
+        Console.WriteLine("|                                       |");
+        Console.WriteLine("=========================================");
     }
 
     public static void GetPlayerName(string str, int id)
@@ -240,27 +281,35 @@ public class Display
         }
         Console.WriteLine("-----------------------------------------");
         Console.WriteLine("|    1    2    3    4    5    6    7    |");
+        Console.WriteLine("-----------------------------------------");
 
         if (!win)
         {
-            Console.WriteLine("-----------------------------------------");
             Console.WriteLine("| Please input column no. to cast move: |");
             Console.WriteLine("=========================================");
         }
     }
 
-    public static void PlayerTurn(string name, int id)
+    public static async void PlayerTurn(string name, int id)
     {
         Display.ColoredDisplay(name + "'s", id);
         Console.Write(" turn: ");
+        await Task.Delay(20000);
     }
 
     public static void Winner(string name, int id)
     {
-        Console.WriteLine("-----------------------------------------");
         Console.Write("| Congratulations! ");
         Display.ColoredDisplay(name, id);
         Console.WriteLine(" wins! ");
+        Console.WriteLine("=========================================");
+    }
+
+    public static void LosttoAI(string name, int id)
+    {
+        Console.Write("| Sorry ");
+        Display.ColoredDisplay(name, id);
+        Console.WriteLine(" wins! =( ");
         Console.WriteLine("=========================================");
     }
 
