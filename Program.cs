@@ -57,7 +57,6 @@ class Board
         if (nextCell >= 0)
         {
             BoardState[nextCell, mark] = player.ID;
-            Display.PrintBoard(BoardState);
         }
         else
         {
@@ -135,6 +134,7 @@ class Board
 class Connect4Game
 {
     private static int _turn { get; set; }
+    private static bool _win { get; set; }
     private static Player _player1 { get; set; }
     private static Player _player2 { get; set; }
 
@@ -144,22 +144,23 @@ class Connect4Game
     static Connect4Game()
     {
         _turn = 0;
+        _win = false;
     }
 
     public static void SetupGame()
     {
-        Display.GetPlayerName(" Please enter Player 1's name: ", 1);
-        _player1 = new Player(Console.ReadLine(), 1);
+        //Display.GetPlayerName(" Please enter Player 1's name: ", 1);
+        //_player1 = new Player(Console.ReadLine(), 1);
 
-        Display.GetPlayerName(" Please enter Player 2's name: ", 2);
-        _player2 = new Player(Console.ReadLine(), 2);
+        //Display.GetPlayerName(" Please enter Player 2's name: ", 2);
+        //_player2 = new Player(Console.ReadLine(), 2);
 
-        //_player1 = new Player("Glenn", 1);
+        _player1 = new Player("Glenn", 1);
 
-        //_player2 = new Player("Roma", 2);
+        _player2 = new Player("Roma", 2);
 
         _board = new Board();
-        Display.PrintBoard(_board.BoardState);
+        Display.PrintBoard(_board.BoardState, _win);
         _turn = 0;
     }
 
@@ -176,12 +177,11 @@ class Connect4Game
     public static bool MakeTurn(Player _player)
     {
         _board.UpdateBoard(_player, _player.Turn());
-        if (_board.CheckWin(_player.ID))
-        {
+        _win = _board.CheckWin(_player.ID);
+        Display.PrintBoard(_board.BoardState, _win);
+        if (_win)
             Display.Winner(_player.Name, _player.ID);
-            return true;
-        }
-        return false;
+        return (_win);
     }
 
 
@@ -223,7 +223,7 @@ public class Display
         Console.Write(str);
     }
 
-    public static void PrintBoard(int[,] board)
+    public static void PrintBoard(int[,] board, bool win)
     {
         Console.Clear();
         DisplayTitle();
@@ -240,7 +240,13 @@ public class Display
         }
         Console.WriteLine("-----------------------------------------");
         Console.WriteLine("|    1    2    3    4    5    6    7    |");
-        Console.WriteLine("-----------------------------------------");
+
+        if (!win)
+        {
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("| Please input column no. to cast move: |");
+            Console.WriteLine("=========================================");
+        }
     }
 
     public static void PlayerTurn(string name, int id)
@@ -251,6 +257,7 @@ public class Display
 
     public static void Winner(string name, int id)
     {
+        Console.WriteLine("-----------------------------------------");
         Console.Write("| Congratulations! ");
         Display.ColoredDisplay(name, id);
         Console.WriteLine(" wins! ");
