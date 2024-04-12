@@ -1,4 +1,4 @@
-﻿// Updated Board
+﻿// Updated Delay in AI turn
 
 using System.Diagnostics;
 using System.Numerics;
