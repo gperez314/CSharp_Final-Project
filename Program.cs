@@ -1,4 +1,4 @@
-﻿// Updated Delay in AI turn
+﻿// Updated Board
 
 using System.Diagnostics;
 using System.Numerics;
@@ -36,10 +36,10 @@ class AI : Player
     {
         Display.PlayerTurn(Name, ID);
         Console.CancelKeyPress += (_, e) => e.Cancel = true;
-        await Task.Delay(2000);
+        await Task.Delay(1000);
         int playerTurn = (new Random()).Next(0, 7);
         Console.Write(playerTurn + 1);
-        await Task.Delay(2000);
+        await Task.Delay(1000);
         Console.WriteLine("");
         Console.CancelKeyPress += (_, e) => e.Cancel = false;
         return playerTurn;
