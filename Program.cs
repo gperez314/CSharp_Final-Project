@@ -35,12 +35,14 @@ class AI : Player
     public override async Task<int> Turn()
     {
         Display.PlayerTurn(Name, ID);
+        // Console is locked
         Console.CancelKeyPress += (_, e) => e.Cancel = true;
-        await Task.Delay(1000);
+        await Task.Delay(1500);
         int playerTurn = (new Random()).Next(0, 7);
         Console.Write(playerTurn + 1);
-        await Task.Delay(1000);
+        await Task.Delay(1500);
         Console.WriteLine("");
+        // Console is locked
         Console.CancelKeyPress += (_, e) => e.Cancel = false;
         return playerTurn;
     }
