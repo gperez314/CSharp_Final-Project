@@ -1,5 +1,6 @@
 ﻿// Updated Board
 
+using System.Data.Common;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -23,8 +24,24 @@ class Player
 
     public virtual async Task<int> Turn()
     {
-        Display.PlayerTurn(Name, ID); ;
-        int playerTurn = int.Parse(Console.ReadLine())-1;
+        Display.PlayerTurn(Name, ID);
+        int playerTurn;
+        try
+        {
+            playerTurn = int.Parse(Console.ReadLine()) - 1;
+            if (playerTurn < 0 || playerTurn > 6)
+                throw new ArgumentOutOfRangeException();
+        }
+        catch (ArgumentOutOfRangeException) 
+        {
+            Console.WriteLine("Invalid move. Column no. out of range!");
+            playerTurn = Turn().Result;
+        }
+        catch
+        {
+            Console.WriteLine("Invalid move. Not a valid column no.!");
+            playerTurn = Turn().Result;
+        }
         return playerTurn;
     }
 }
@@ -35,14 +52,12 @@ class AI : Player
     public override async Task<int> Turn()
     {
         Display.PlayerTurn(Name, ID);
-        // Console is locked
         Console.CancelKeyPress += (_, e) => e.Cancel = true;
-        await Task.Delay(1500);
+        await Task.Delay(500);
         int playerTurn = (new Random()).Next(0, 7);
         Console.Write(playerTurn + 1);
-        await Task.Delay(1500);
+        await Task.Delay(500);
         Console.WriteLine("");
-        // Console is locked
         Console.CancelKeyPress += (_, e) => e.Cancel = false;
         return playerTurn;
     }
@@ -170,9 +185,8 @@ class Connect4Game
     public static void SetupGame()
     {
         Display.GetGameMode();
-        Console.Write("Please select game mode:");
-        _mode = int.Parse(Console.ReadLine());
-
+        _mode = GameMode();
+        Display.ShowGameMode(_mode);
 
         Display.GetPlayerName(" Please enter Player 1's name: ", 1);
         _player1 = new Player(Console.ReadLine(), 1);
@@ -190,6 +204,13 @@ class Connect4Game
         _board = new Board();
         Display.PrintBoard(_board.BoardState, _win);
         _turn = 0;
+    }
+
+    public static int GameMode()
+    {
+        Console.Write("Please select game mode: ");
+            _mode = int.Parse(Console.ReadLine());
+        return _mode;
     }
 
 
@@ -221,7 +242,8 @@ class Connect4Game
     public static bool PlayAgain()
     {
         Console.Write("Do you want to play again (Y/N)? ");
-        return char.Parse(Console.ReadLine()) == 'Y';
+        string retry = Console.ReadLine().ToUpper();
+        return retry == "Y";
     }
 }
 
@@ -250,20 +272,35 @@ public class Display
         DisplayTitle();
         Console.WriteLine("| Glenn Perez  |  Rod Stephen Espiritu  |");
         Console.WriteLine("-----------------------------------------");
-        Console.WriteLine("| <<<<<<<<<<< SELECT MODE >>>>>>>>>>>>> |");
+        Console.WriteLine("| <<<<<<<<<<<< SELECT MODE >>>>>>>>>>>> |");
         Console.WriteLine("|                                       |");
-        Console.WriteLine("|            [1]: 2 Player              |");
-        Console.WriteLine("|            [2]: vs. Computer          |");
+        Console.WriteLine("|          [1]: 2 Player                |");
+        Console.WriteLine("|          [2]: vs. Computer            |");
         Console.WriteLine("|                                       |");
         Console.WriteLine("=========================================");
     }
 
-    public static void GetPlayerName(string str, int id)
+    public static void ShowGameMode(int mode)
     {
         Console.Clear();
         DisplayTitle();
         Console.WriteLine("| Glenn Perez  |  Rod Stephen Espiritu  |");
-        Console.WriteLine("-----------------------------------------");
+        if (mode == 1)
+        {
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("| <<<<<<<<<<  2-PLAYER MODE  >>>>>>>>>> | ");
+            Console.WriteLine("-----------------------------------------");
+        }
+        else
+         {
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine("| <<<<<<<<  VS. COMPUTER MODE  >>>>>>>> | ");
+            Console.WriteLine("-----------------------------------------");
+        }
+    }
+
+    public static void GetPlayerName(string str, int id)
+    {
         Console.WriteLine("");
         ColoredDisplay("   ", id);
         Console.Write(str);
@@ -299,7 +336,6 @@ public class Display
     {
         Display.ColoredDisplay(name + "'s", id);
         Console.Write(" turn: ");
-        await Task.Delay(20000);
     }
 
     public static void Winner(string name, int id)
