@@ -34,12 +34,12 @@ class Player
         }
         catch (ArgumentOutOfRangeException) 
         {
-            Console.WriteLine("Invalid move. Column no. out of range!");
+            Console.WriteLine("Invalid move. Column number out of range!");
             playerTurn = Turn().Result;
         }
         catch
         {
-            Console.WriteLine("Invalid move. Not a valid column no.!");
+            Console.WriteLine("Invalid move. Not a valid column number!");
             playerTurn = Turn().Result;
         }
         return playerTurn;
