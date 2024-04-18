@@ -26,3 +26,18 @@ C:\Users\Glenn\Desktop\C# Final Project\CSharp_Final-Project\bin\Debug\net7.0\Fi
 C:\Users\Glenn\Desktop\C# Final Project\CSharp_Final-Project\bin\Debug\net7.0\Final Project_Connect 4 Game.pdb
 C:\Users\Glenn\Desktop\C# Final Project\CSharp_Final-Project\obj\Debug\net7.0\Final Project_Connect 4 Game.genruntimeconfig.cache
 C:\Users\Glenn\Desktop\C# Final Project\CSharp_Final-Project\obj\Debug\net7.0\ref\Final Project_Connect 4 Game.dll
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\bin\Debug\net7.0\Final Project_Connect 4 Game.exe
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\bin\Debug\net7.0\Final Project_Connect 4 Game.deps.json
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\bin\Debug\net7.0\Final Project_Connect 4 Game.runtimeconfig.json
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\bin\Debug\net7.0\Final Project_Connect 4 Game.dll
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\bin\Debug\net7.0\Final Project_Connect 4 Game.pdb
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.AssemblyInfoInputs.cache
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.AssemblyInfo.cs
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.csproj.CoreCompileInputs.cache
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.sourcelink.json
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.dll
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\refint\Final Project_Connect 4 Game.dll
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.pdb
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\Final Project_Connect 4 Game.genruntimeconfig.cache
+C:\Users\clngl\OneDrive\Desktop\C Sharp Final Project\obj\Debug\net7.0\ref\Final Project_Connect 4 Game.dll
