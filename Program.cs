@@ -260,10 +260,10 @@ class Connect4Game
             else
                 Display.Winner(_player.Name, _player.ID);
         }
-        if (_boardFull || !_win)
+        if (_boardFull && !_win)
             Display.Draw();
 
-        return (_win && _boardFull);
+        return (_win || _boardFull);
     }
 
 
