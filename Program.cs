@@ -263,7 +263,7 @@ class Connect4Game
         if (_boardFull || !_win)
             Display.Draw();
 
-        return (_win || _boardFull);
+        return (_win && _boardFull);
     }
 
 
