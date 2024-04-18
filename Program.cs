@@ -1,6 +1,4 @@
-﻿// Updated Board
-
-using System.Data.Common;
+﻿using System.Data.Common;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
@@ -39,7 +37,7 @@ class Player
         }
         catch
         {
-            Console.WriteLine("Invalid move. Not a valid no. number!");
+            Console.WriteLine("Invalid move. Not a valid column no.!");
             playerTurn = Turn().Result;
         }
         return playerTurn;
@@ -109,6 +107,20 @@ class Board
         return -1;
     }
 
+    public bool IsBoardFull()
+    {
+        for (int i = 0; i < Rows; i++)
+        {
+            for (int j = 0; j < Columns; j++)
+            {
+                if (BoardState[i, j] == 0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     public bool CheckWin(int player)
     {
@@ -169,6 +181,7 @@ class Connect4Game
 {
     private static int _turn { get; set; }
     private static bool _win { get; set; }
+    private static bool _boardFull { get; set; }
     private static int _mode { get; set; }
     private static Player _player1 { get; set; }
     private static Player _player2 { get; set; }
@@ -184,6 +197,9 @@ class Connect4Game
 
     public static void SetupGame()
     {
+        _turn = 0;
+        _board = new Board();
+
         Display.GetGameMode();
         _mode = GameMode();
         Display.ShowGameMode(_mode);
@@ -200,16 +216,24 @@ class Connect4Game
         {
             _player2 = new AI("Computer", 2);
         }
-
-        _board = new Board();
         Display.PrintBoard(_board.BoardState, _win);
-        _turn = 0;
+
     }
 
     public static int GameMode()
     {
         Console.Write("Please select game mode: ");
+        try
+        {
             _mode = int.Parse(Console.ReadLine());
+            if (_mode != 1 && _mode != 2)
+                throw new ArgumentOutOfRangeException();
+        }
+        catch
+        {
+            Console.WriteLine("Invalid game mode!");
+            _mode = GameMode();
+        }
         return _mode;
     }
 
@@ -227,15 +251,19 @@ class Connect4Game
     {
         _board.UpdateBoard(_player, _player.Turn().Result);
         _win = _board.CheckWin(_player.ID);
-        Display.PrintBoard(_board.BoardState, _win);
+        _boardFull = _board.IsBoardFull();
+        Display.PrintBoard(_board.BoardState, _win || _boardFull);
         if (_win)
         {
             if ((_mode != 1) && (_player.ID == 2))
-                Display.LosttoAI(_player.Name, _player.ID);     
+                Display.LosttoAI(_player.Name, _player.ID);
             else
                 Display.Winner(_player.Name, _player.ID);
         }
-        return (_win);
+        if (_boardFull || !_win)
+            Display.Draw();
+
+        return (_win || _boardFull);
     }
 
 
@@ -243,6 +271,16 @@ class Connect4Game
     {
         Console.Write("Do you want to play again (Y/N)? ");
         string retry = Console.ReadLine().ToUpper();
+        try
+        {
+            if (retry != "Y" && retry != "N")
+                throw new ArgumentException();
+        }
+        catch
+        {
+            Console.WriteLine("Invalid option entered!");
+            return PlayAgain();
+        }
         return retry == "Y";
     }
 }
@@ -351,6 +389,12 @@ public class Display
         Console.Write("| Sorry ");
         Display.ColoredDisplay(name, id);
         Console.WriteLine(" wins! =( ");
+        Console.WriteLine("=========================================");
+    }
+
+    public static void Draw()
+    {
+        Console.WriteLine("| The game is a draw!                   |");
         Console.WriteLine("=========================================");
     }
 
