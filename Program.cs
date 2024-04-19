@@ -85,14 +85,18 @@ class AI : Player
 
 class Board
 {
+    // Define properties for BoardState and number of rows and columns
     public int[,] BoardState { get; set; }
     public static int Rows { get; private set; } = 7; // private set
     public static int Columns { get; private set; } = 7; // private set
 
+    // Construtor for the Board class
     public Board()
     {
+        // Create a 2D array to represent the board state
         BoardState = new int[Rows, Columns];
 
+        // Initialize each board state element to zero
         for (int i = 0; i < Rows; i++)
         {
             for (int j = 0; j < Columns; j++)
@@ -102,31 +106,37 @@ class Board
         }
     }
 
+    // Method to update the boardstate based on the player's move
     public void UpdateBoard(Player player, int mark)
     {
+        // Get the next available cell in the selected column
         int nextCell = GetNextAvailCell(mark);
+        // Check if there is an available cell in the selected column
         if (nextCell >= 0)
         {
+            // Cell is available. Update board state.
             BoardState[nextCell, mark] = player.ID;
         }
         else
         {
+            // Display invalid move message and ask the player to select a different turn
             Console.WriteLine("Invalid move. Column is already full!");
-            Connect4Game.MakeTurn(player);
+            Connect4Game.MakeTurn(player); // Repeat player's turn function
         }
     }
 
-
+    // Method to get the next available cell in the selected column
     private int GetNextAvailCell(int column)
     {
         for (int i = Rows - 1; i >= 0; i--)
         {
             if (BoardState[i, column] == 0)
-                return i; 
+                return i; // Available cell found in the current column
         }
-        return -1;
+        return -1; // No more available cells
     }
 
+    // Method to determine if the board is already full
     public bool IsBoardFull()
     {
         for (int i = 0; i < Rows; i++)
@@ -134,15 +144,18 @@ class Board
             for (int j = 0; j < Columns; j++)
             {
                 if (BoardState[i, j] == 0)
-                    return false; 
+                    return false; // Board is not yet full
             }
         }
-        return true;
+        return true; // Board already full
     }
 
+    // Method to check for the winning combinations in the current board
+    // A CheckWin algorithm written in Java was found and utilized
+    // Source: https://stackoverflow.com/questions/32770321/connect-4-check-for-a-win-algorithm
     public bool CheckWin(int player)
     {
-
+        // Check for horizontal combinations
         for (int j = 0; j < Rows - 3; j++)
         {
             for (int i = 0; i < Columns; i++)
@@ -150,11 +163,12 @@ class Board
                 if (BoardState[i, j] == player && BoardState[i, j + 1] == player &&
                     BoardState[i, j + 2] == player && BoardState[i, j + 3] == player)
                 {
-                    return true;
+                    return true; // combination found
                 }
             }
         }
 
+        // Check for vertical combinations
         for (int i = 0; i < Columns - 3; i++)
         {
             for (int j = 0; j < Rows; j++)
@@ -162,35 +176,37 @@ class Board
                 if (BoardState[i, j] == player && BoardState[i + 1, j] == player &&
                     BoardState[i + 2, j] == player && BoardState[i + 3, j] == player)
                 {
-                    return true; 
+                    return true; // combination found
                 }
             }
         }
 
+        // Check for ascending diagonal combinations
         for (int i = 3; i < Columns; i++)
         {
             for (int j = 0; j < Rows - 3; j++)
             {
                 if (BoardState[i, j] == player && BoardState[i - 1, j + 1] == player &&
                     BoardState[i - 2, j + 2] == player && BoardState[i - 3, j + 3] == player)
-                    return true;
+                    return true; // combination found
             }
         }
 
-
+        // Check for descending diagonal combinations
         for (int i = 3; i < Columns; i++)
         {
             for (int j = 3; j < Rows; j++)
             {
                 if (BoardState[i, j] == player && BoardState[i - 1, j - 1] == player &&
                     BoardState[i - 2, j - 2] == player && BoardState[i - 3, j - 3] == player)
-                    return true;
+                    return true; // combination found
             }
         }
 
-        return false;
+        return false; // No winning combination found
     }
 }
+
 
 
 class Connect4Game
