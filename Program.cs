@@ -1,4 +1,13 @@
-﻿// ==============================================================================================================
+﻿// Name: COURSE FINAL TERM PROJECT
+// Course Code: SODV1202
+// Class: Introduction to Object Oriented Programming
+// Author: Glenn Perez, Rod Stephen Espiritu
+// ==============================================================================================================
+// CONNECT-4 GAME DEVELOPMENT PROJECT
+// ==============================================================================================================
+
+
+// ==============================================================================================================
 // Player Class: Class to represent the players who will play the game
 // ==============================================================================================================
 using static System.Net.Mime.MediaTypeNames;
@@ -82,6 +91,10 @@ class AI : Player
     }
 }
 
+
+// ==============================================================================================================
+// Board Class: Represents the playing board where the players will cast their moves
+// ==============================================================================================================
 class Board
 {
     // Define properties for BoardState and number of rows and columns
@@ -207,9 +220,13 @@ class Board
 }
 
 
-
+// ==============================================================================================================
+// Connect4Game Class: The class which manages all the other classes to collectively create the game
+// ==============================================================================================================
 class Connect4Game
 {
+    // Define properties for the players and board objects
+    // Define properties for static fields (turn, win, boardfull, mode)
     private static Player _player1 { get; set; }
     private static Player _player2 { get; set; }
     private static Board _board { get; set; }
@@ -218,108 +235,140 @@ class Connect4Game
     private static bool _boardFull { get; set; } // board cells full
     private static int _mode { get; set; } // game mode [0: 2-Player , 1: vs. Computer] 
 
+    // Construtor for the Connect4Game class
     static Connect4Game()
     {
+        // Reset all static fields
         _turn = 0;
         _win = false;
         _boardFull = false;
         _mode = 0;
     }
 
+    // Method to set-up the game parameters
     public static void SetupGame()
     {
+        // Reset all static fields
         _turn = 0;
         _win = false;
         _boardFull = false;
         _mode = 0;
 
-        _board = new Board();
+        _board = new Board();  // Create a new board object
 
-        Display.GetGameMode();
-        _mode = GameMode(); 
-        Display.ShowGameMode(_mode);
+        // Display game mode window and get mode from the user
+        Display.GetGameMode(); // Game mode visuals
+        _mode = GameMode(); // Ask user to select game mode
+        Display.ShowGameMode(_mode); // Display selected game mode visuals
+
+        // Get Player 1 name and create Player 1 object
         Display.GetPlayerName(" Please enter Player 1's name: ", 1);
         _player1 = new Player(Console.ReadLine(), 1);
 
+        // Evaluate selected mode (0: 2-Player , 1: vs. Computer)
         if (_mode == 1)
         {
+            // 2-Player Mode selected.
+            // Get Player 2 name and create Player 2 object
             Display.GetPlayerName(" Please enter Player 2's name: ", 2);
             _player2 = new Player(Console.ReadLine(), 2);
         }
         else
         {
+            // vs. Computer Mode selected.
+            // Create AI object. (Name: Computer , ID: 2)
             _player2 = new AI("Computer", 2);
         }
+        // Display Connect4 Board Window
         Display.PrintBoard(_board.BoardState, _win);
     }
 
+    // Method to get the Game Mode from the user
     public static int GameMode()
     {
+        // Get game mode input from console and check for errors
         Console.Write("Please select game mode: ");
         try
         {
+            // Read data from console
             _mode = int.Parse(Console.ReadLine());
+            // Check if valid range
             if (_mode != 1 && _mode != 2)
                 throw new ArgumentOutOfRangeException();
         }
-       
+        // Error handler for invalid format inputs
         catch
         {
             Console.WriteLine("Invalid game mode!");
-            _mode = GameMode();
+            _mode = GameMode(); // Repeat getting game mode
         }
-        return _mode;
+        return _mode; // Return game mode
     }
 
-
+    // Method to play the Connect4Game
+    // Handle alternately assigning users' turn. Return boolean true if there is a winner/draw.
     public static bool Play()
     {
-        _turn++;
+        _turn++; // Increment turn count
+        // Assign turn to Player 1
         if (_turn % 2 == 1)
-            return !MakeTurn(_player1);
+            return !MakeTurn(_player1); // Player 1 turn
+        // Assign turn to Player 2
         else
-            return !MakeTurn(_player2);
+            return !MakeTurn(_player2); // Player 2 turn
     }
 
+    // Method to make a player's turn. Return boolean true if there is a winner/draw.
     public static bool MakeTurn(Player _player)
     {
+        // Get player's turn and update board state
         _board.UpdateBoard(_player, _player.Turn().Result);
+        // Check if there is already a winner
         _win = _board.CheckWin(_player.ID);
+        // Check if the board is already full/ draw
         _boardFull = _board.IsBoardFull();
+        // Display Connect4 Board Window
         Display.PrintBoard(_board.BoardState, _win || _boardFull);
 
+        // Evaluate game result and display corresponding visuals
         if (_win)
         {
+            // Console display for an AI winning
             if ((_mode != 1) && (_player.ID == 2))
                 Display.LosttoAI(_player.Name, _player.ID);
+            // Console display for a player winning
             else
                 Display.Winner(_player.Name, _player.ID);
         }
+        // Console display for a draw
         if (_boardFull && !_win)
             Display.Draw();
 
-        return (_win || _boardFull);
+        return (_win || _boardFull); // Return game result
     }
 
+    // Method to replay the game
     public static bool PlayAgain()
     {
-        Console.Write("Do you want to play again (Y/N)? "); 
+        // Ask if the user wants to replay the game
+        Console.Write("Do you want to play again (Y/N)? ");
+        // Get user input from console and check for errors
         string retry = Console.ReadLine().ToUpper();
         try
         {
+            // Check if valid input
             if (retry != "Y" && retry != "N")
                 throw new ArgumentException();
         }
-        
+        // Error handler for invalid format inputs
         catch
         {
             Console.WriteLine("Invalid option entered!");
             return PlayAgain();
         }
-        return retry == "Y"; 
+        return retry == "Y"; // return valid user input
     }
 }
-
 
 public class Display
 {
@@ -374,8 +423,8 @@ public class Display
 
     public static void PrintBoard(int[,] board, bool win)
     {
-        Console.Clear();
-        DisplayTitle(); 
+        Console.Clear(); 
+        DisplayTitle();
 
         for (int i = 0; i < Board.Rows; i++)
         {
@@ -402,7 +451,7 @@ public class Display
 
     public static async void PlayerTurn(string name, int id)
     {
-        Display.ColoredDisplay(name + "'s", id);
+        Display.ColoredDisplay(name + "'s", id); 
         Console.Write(" turn: ");
     }
 
@@ -417,7 +466,7 @@ public class Display
     public static void LosttoAI(string name, int id)
     {
         Console.Write("| Sorry ");
-        Display.ColoredDisplay(name, id); 
+        Display.ColoredDisplay(name, id);
         Console.WriteLine(" wins! =( ");
         Console.WriteLine("=========================================");
     }
@@ -431,11 +480,11 @@ public class Display
     public static void Symbol(int id)
     {
         if (id == 1)
-            ColoredDisplay("X", id);
+            ColoredDisplay("X", id); 
         else if (id == 2)
-            ColoredDisplay("O", id);
+            ColoredDisplay("O", id); 
         else
-            Console.Write("-"); 
+            Console.Write("-");
     }
 
     public static void ColoredDisplay(string str, int id)
