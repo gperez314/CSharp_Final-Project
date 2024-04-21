@@ -370,8 +370,13 @@ class Connect4Game
     }
 }
 
+
+// ==============================================================================================================
+// Display Class: A class dedicated for displaying the game visuals in the console
+// ==============================================================================================================
 public class Display
 {
+    // Method to display the Game Title
     public static void DisplayTitle()
     {
         Console.WriteLine("=========================================");
@@ -381,6 +386,7 @@ public class Display
         Console.WriteLine("-----------------------------------------");
     }
 
+    // Method to display the Get Game Mode Window
     public static void GetGameMode()
     {
         Console.Clear();
@@ -395,6 +401,7 @@ public class Display
         Console.WriteLine("=========================================");
     }
 
+    // Method to display the Game Mode Window
     public static void ShowGameMode(int mode)
     {
         Console.Clear();
@@ -402,18 +409,21 @@ public class Display
         Console.WriteLine("| Glenn Perez  |  Rod Stephen Espiritu  |");
         if (mode == 1)
         {
+            // Display for 2-Player Mode
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine("| <<<<<<<<<<  2-PLAYER MODE  >>>>>>>>>> | ");
             Console.WriteLine("-----------------------------------------");
         }
         else
         {
+            // Display for vs. Computer Mode
             Console.WriteLine("-----------------------------------------");
             Console.WriteLine("| <<<<<<<<  VS. COMPUTER MODE  >>>>>>>> | ");
             Console.WriteLine("-----------------------------------------");
         }
     }
 
+    // Method to display the Get Player Name string with the designated color
     public static void GetPlayerName(string str, int id)
     {
         Console.WriteLine("");
@@ -421,27 +431,31 @@ public class Display
         Console.Write(str);
     }
 
+    // Method to display the Connect4 GameBoard
     public static void PrintBoard(int[,] board, bool win)
     {
-        Console.Clear(); 
-        DisplayTitle();
+        Console.Clear(); // Clear console
+        DisplayTitle(); // Display Game title
 
+        // Reconstruct Game Board display with the correct symbols
         for (int i = 0; i < Board.Rows; i++)
         {
             Console.Write("|    ");
             for (int j = 0; j < Board.Columns; j++)
             {
-                Symbol(board[i, j]); 
+                Symbol(board[i, j]); // colored symbol
                 Console.Write("    ");
             }
             Console.Write("|");
             Console.WriteLine();
         }
 
+        // Append column numbers at the end
         Console.WriteLine("-----------------------------------------");
         Console.WriteLine("|    1    2    3    4    5    6    7    |");
         Console.WriteLine("-----------------------------------------");
 
+        // If there is no winner yet, append additional instruction to cast move
         if (!win)
         {
             Console.WriteLine("| Please input column no. to cast move: |");
@@ -449,61 +463,73 @@ public class Display
         }
     }
 
+    // Method to dispay the player's turn message with the player name colored
     public static async void PlayerTurn(string name, int id)
     {
-        Display.ColoredDisplay(name + "'s", id); 
+        Display.ColoredDisplay(name + "'s", id); // colored name display
         Console.Write(" turn: ");
     }
 
+    // Method to display the winning player message
     public static void Winner(string name, int id)
     {
         Console.Write("| Congratulations! ");
-        Display.ColoredDisplay(name, id);
+        Display.ColoredDisplay(name, id); // colored name display
         Console.WriteLine(" wins! ");
         Console.WriteLine("=========================================");
     }
 
+    // Method to display the winning AI message
     public static void LosttoAI(string name, int id)
     {
         Console.Write("| Sorry ");
-        Display.ColoredDisplay(name, id);
+        Display.ColoredDisplay(name, id); // colored name display
         Console.WriteLine(" wins! =( ");
         Console.WriteLine("=========================================");
     }
 
+    // Method to display the game draw message
     public static void Draw()
     {
         Console.WriteLine("| The game is a draw!                   |");
         Console.WriteLine("=========================================");
     }
 
+    // Method to display the corresponding colored symbols
     public static void Symbol(int id)
     {
         if (id == 1)
-            ColoredDisplay("X", id); 
+            ColoredDisplay("X", id); // Player 1 symbol: "X"
         else if (id == 2)
-            ColoredDisplay("O", id); 
+            ColoredDisplay("O", id); // Player 1 symbol: "O"
         else
-            Console.Write("-");
+            Console.Write("-"); // Available symbol: "-"
     }
 
+    // Method to color the desired message
     public static void ColoredDisplay(string str, int id)
     {
+        // Set background color based from player ID
+        // Player 1: Red, Player 2: Blue
         if (id == 1)
             Console.BackgroundColor = ConsoleColor.Red;
         else
             Console.BackgroundColor = ConsoleColor.Blue;
+        // Set foreground color to black
         Console.ForegroundColor = ConsoleColor.Black;
+        // Write the colored string on colored background
         Console.Write(str);
+        // Reset background and foreground colors to default
         Console.ResetColor();
     }
 }
+
+
 class Program
 {
     static void Main(string[] args)
     {
         bool run = true; 
-
         while (run)
         {
             Connect4Game.SetupGame();
