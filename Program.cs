@@ -1,13 +1,4 @@
-﻿// Name: COURSE FINAL TERM PROJECT
-// Course Code: SODV1202
-// Class: Introduction to Object Oriented Programming
-// Author: Glenn Perez, Rod Stephen Espiritu
-// ==============================================================================================================
-// CONNECT-4 GAME DEVELOPMENT PROJECT
-// ==============================================================================================================
-
-
-// ==============================================================================================================
+﻿// ==============================================================================================================
 // Player Class: Class to represent the players who will play the game
 // ==============================================================================================================
 using static System.Net.Mime.MediaTypeNames;
@@ -304,7 +295,7 @@ class Connect4Game
             // Read data from console
             _mode = int.Parse(Console.ReadLine());
             // Check if valid range
-            if (_mode != 1 && _mode != 2)
+            if (_mode != 1 && _mode != 2 && _mode != 3)
                 throw new ArgumentOutOfRangeException();
         }
         // Error handler for invalid format inputs
