@@ -261,23 +261,34 @@ class Connect4Game
         _mode = GameMode(); // Ask user to select game mode
         Display.ShowGameMode(_mode); // Display selected game mode visuals
 
-        // Get Player 1 name and create Player 1 object
-        Display.GetPlayerName(" Please enter Player 1's name: ", 1);
-        _player1 = new Player(Console.ReadLine(), 1);
-
-        // Evaluate selected mode (0: 2-Player , 1: vs. Computer)
+        // Evaluate selected mode (0: 2-Player , 1: vs. Computer. 3: Computer vs. Computer)
         if (_mode == 1)
         {
             // 2-Player Mode selected.
+            // Get Player 1 name and create Player 1 object
+            Display.GetPlayerName(" Please enter Player 1's name: ", 1);
+            _player1 = new Player(Console.ReadLine(), 1);
             // Get Player 2 name and create Player 2 object
             Display.GetPlayerName(" Please enter Player 2's name: ", 2);
             _player2 = new Player(Console.ReadLine(), 2);
         }
-        else
+        else if (_mode == 2)
         {
             // vs. Computer Mode selected.
+            // Get Player 1 name and create Player 1 object
+            Display.GetPlayerName(" Please enter Player 1's name: ", 1);
+            _player1 = new Player(Console.ReadLine(), 1);
             // Create AI object. (Name: Computer , ID: 2)
             _player2 = new AI("Computer", 2);
+        }
+        else if (_mode == 3)
+        {
+            // Computer vs. Computer Mode selected.
+            // Create AI object. (Name: Computer1 , ID: 1)
+            Display.GetPlayerName(" Please enter Player 1's name: ", 1);
+            _player1 = new AI("Computer 1", 1);
+            // Create AI object. (Name: Computer2 , ID: 2)
+            _player2 = new AI("Computer 2", 2);
         }
         // Display Connect4 Board Window
         Display.PrintBoard(_board.BoardState, _win);
@@ -293,7 +304,7 @@ class Connect4Game
             // Read data from console
             _mode = int.Parse(Console.ReadLine());
             // Check if valid range
-            if (_mode != 1 && _mode != 2)
+            if (_mode != 1 && _mode != 2 && _mode != 3)
                 throw new ArgumentOutOfRangeException();
         }
         // Error handler for invalid format inputs
@@ -333,8 +344,8 @@ class Connect4Game
         // Evaluate game result and display corresponding visuals
         if (_win)
         {
-            // Console display for an AI winning
-            if ((_mode != 1) && (_player.ID == 2))
+            // Console display for an AI winning in vs. Computer mode
+            if ((_mode == 2) && (_player.ID == 2))
                 Display.LosttoAI(_player.Name, _player.ID);
             // Console display for a player winning
             else
@@ -395,8 +406,9 @@ public class Display
         Console.WriteLine("-----------------------------------------");
         Console.WriteLine("| <<<<<<<<<<<< SELECT MODE >>>>>>>>>>>> |");
         Console.WriteLine("|                                       |");
-        Console.WriteLine("|          [1]: 2 Player                |");
-        Console.WriteLine("|          [2]: vs. Computer            |");
+        Console.WriteLine("|        [1]: 2 Player                  |");
+        Console.WriteLine("|        [2]: vs. Computer              |");
+        Console.WriteLine("|        [3]: Computer vs. Computer     |");
         Console.WriteLine("|                                       |");
         Console.WriteLine("=========================================");
     }
@@ -523,18 +535,30 @@ public class Display
         Console.ResetColor();
     }
 }
+// ==============================================================================================================
 
 
+// ==============================================================================================================
+// Program Class: Main Program
+// ==============================================================================================================
 class Program
 {
     static void Main(string[] args)
     {
-        bool run = true; 
+        // Initialize run boolean to true
+        bool run = true;
+
+        // Continue to run the program until run boolean is false
         while (run)
         {
+            // Set-up the Game parameters
             Connect4Game.SetupGame();
-            while (Connect4Game.Play());
+            // Play the Connect 4 Game
+            while (Connect4Game.Play()) ;
+            // Ask the user whether to replay the game
             run = Connect4Game.PlayAgain();
         }
     }
 }
+// ==============================================================================================================
+// ==============================================================================================================
