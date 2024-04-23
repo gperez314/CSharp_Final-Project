@@ -284,10 +284,10 @@ class Connect4Game
         else if (_mode == 3)
         {
             // Computer vs. Computer Mode selected.
-            // Create AI object. (Name: Computer1 , ID: 1)
+            // Create AI object. (Name: Computer 1 , ID: 1)
             Display.GetPlayerName(" Please enter Player 1's name: ", 1);
             _player1 = new AI("Computer 1", 1);
-            // Create AI object. (Name: Computer2 , ID: 2)
+            // Create AI object. (Name: Computer 2 , ID: 2)
             _player2 = new AI("Computer 2", 2);
         }
         // Display Connect4 Board Window
@@ -304,7 +304,7 @@ class Connect4Game
             // Read data from console
             _mode = int.Parse(Console.ReadLine());
             // Check if valid range
-            if (_mode != 1 && _mode != 2 && _mode != 3)
+            if (_mode != 1 && _mode != 2)
                 throw new ArgumentOutOfRangeException();
         }
         // Error handler for invalid format inputs
@@ -408,7 +408,6 @@ public class Display
         Console.WriteLine("|                                       |");
         Console.WriteLine("|        [1]: 2 Player                  |");
         Console.WriteLine("|        [2]: vs. Computer              |");
-        Console.WriteLine("|        [3]: Computer vs. Computer     |");
         Console.WriteLine("|                                       |");
         Console.WriteLine("=========================================");
     }
