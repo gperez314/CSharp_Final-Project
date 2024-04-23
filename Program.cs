@@ -408,6 +408,7 @@ public class Display
         Console.WriteLine("|                                       |");
         Console.WriteLine("|        [1]: 2 Player                  |");
         Console.WriteLine("|        [2]: vs. Computer              |");
+        Console.WriteLine("|        [3]: Computer vs. Computer     |");
         Console.WriteLine("|                                       |");
         Console.WriteLine("=========================================");
     }
